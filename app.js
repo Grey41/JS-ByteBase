@@ -1644,7 +1644,13 @@ app.get("/sign", (req, res) => res.send(page("sign")))
 app.get("/email", (req, res) => res.send(page("email")))
 
 app.get("/password", (req, res, next) => {
-    try {if (req.session.name) res.send(page("password"))}
+    try {
+        if (req.session.name)
+            return res.send(page("password"))
+
+        res.status(403).send(page("forbidden"))
+    }
+
     catch (error) {next(error)}
 })
 
@@ -1666,7 +1672,8 @@ app.get("/project", async (req, res, next) => {
     try {
         const user = await person(req.session.name)
         if (user) return res.send(page("project", {user}))
-        res.send(page("forbidden"))
+
+        res.status(403).send(page("forbidden"))
     }
 
     catch (error) {next(error)}
@@ -1680,8 +1687,6 @@ app.post("/finish", async (req, res, next) => {
             req.session.code = req.body.code
             return res.send(page("finish", {user, code: req.body.code}))
         }
-
-        res.send(page("forbidden"))
     }
 
     catch (error) {next(error)}
