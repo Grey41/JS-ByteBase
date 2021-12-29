@@ -132,6 +132,7 @@ body {
 
 button, select, input {
     font-family: nunito;
+    appearance: none;
     font-size: var(--font)
 }
 
