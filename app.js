@@ -730,7 +730,8 @@ ${blocks.footer()}
 
     .user img {
         box-shadow: var(--shadow) var(--box);
-        border-radius: 50%
+        border-radius: 50%;
+        transition-duration: var(--transition)
     }
 
     .fa-cog {
@@ -741,6 +742,7 @@ ${blocks.footer()}
     }
 
     .fa-cog:hover {color: var(--text)}
+    .user > label > img {cursor: pointer}
     .user > label > img:hover {opacity: 0.5}
 
     h1 {
