@@ -1,0 +1,513 @@
+@font-face {
+    font-family: sans;
+    src: url(sans.ttf)
+}
+
+@font-face {
+    font-family: nunito;
+    src: url(nunito.ttf)
+}
+
+:root {
+    --transition: 0.2s;
+    --radius: 0.3em;
+    --padding: 0.4em;
+    --border: 1px solid;
+    --shadow: 2px 2px 6px;
+    --header: 30px;
+    --reveal: 0.5s
+}
+
+body[theme = "Light"] {
+    --background: #eee;
+    --green: #4a4;
+    --green-hover: #393;
+    --deep: #07d;
+    --blue: #38c;
+    --blue-hover: #27b;
+    --off: #ddd;
+    --banner: #aaa;
+    --error: #c11;
+    --error-hover: #b00;
+    --button: #ccc;
+    --plain: #bbb;
+    --box: #bbb;
+    --blank: #999;
+    --fade: #888;
+    --text-title: #333;
+    --text: #000;
+    --text-contrast: #fff;
+}
+
+body[theme = "Dark"] {
+    --background: #222;
+    --green: #282;
+    --green-hover: #171;
+    --deep: #29f;
+    --blue: #16a;
+    --blue-hover: #059;
+    --off: #333;
+    --banner: #444;
+    --error: #f55;
+    --error-hover: #e44;
+    --button: #333;
+    --plain: #666;
+    --box: #666;
+    --blank: #999;
+    --fade: #777;
+    --text-title: #bbb;
+    --text: #ccc;
+    --text-contrast: #fff;
+}
+
+body[theme = "Gob"] {
+    --background: #111;
+    --green: #2b2;
+    --green-hover: #1a1;
+    --deep: #2bd;
+    --blue: #189;
+    --blue-hover: #078;
+    --off: #222;
+    --banner: #333;
+    --error: #f55;
+    --error-hover: #e44;
+    --button: #444;
+    --plain: #0d8;
+    --box: #666;
+    --blank: #999;
+    --fade: #777;
+    --text-title: #bbb;
+    --text: #0f0;
+    --text-contrast: #fff;
+}
+
+body[theme = "Vibrant"] {
+    --background: #222;
+    --green: #6a0;
+    --green-hover: #590;
+    --deep: #2bd;
+    --blue: #189;
+    --blue-hover: #078;
+    --off: #333;
+    --banner: #444;
+    --error: #f55;
+    --error-hover: #e44;
+    --button: #555;
+    --plain: #d80;
+    --box: #666;
+    --blank: #fff;
+    --fade: #777;
+    --text-title: #fff;
+    --text: #fd5;
+    --text-contrast: #fff;
+}
+
+body[theme = "Navy"] {
+    --background: #234;
+    --green: #4a4;
+    --green-hover: #393;
+    --deep: #29f;
+    --blue: #27b;
+    --blue-hover: #16a;
+    --off: #345;
+    --banner: #456;
+    --error: #f55;
+    --error-hover: #e44;
+    --button: #678;
+    --plain: #07d;
+    --box: #567;
+    --blank: #567;
+    --fade: #89a;
+    --text-title: #cde;
+    --text: #bcd;
+    --text-contrast: #fff;
+}
+
+body {
+    background-color: var(--background);
+    font-size: var(--font);
+    font-family: nunito;
+    margin: 0
+}
+
+button, select, input {
+    font-family: nunito;
+    font-size: var(--font)
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: var(--padding);
+    font-size: var(--small);
+    background-color: var(--background);
+    z-index: 4
+}
+
+footer span {
+    color: var(--text);
+    float: right
+}
+
+footer a {color: var(--deep)}
+footer a:hover {color: var(--blank)}
+button {cursor: pointer}
+a {text-decoration: none}
+a, button {transition-duration: var(--transition)}
+input[type = "file"] {display: none}
+
+.background {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -1
+}
+
+.code {
+    border-radius: var(--radius);
+    font-size: var(--font)
+}
+
+.comment {
+    border: var(--border) var(--plain);
+    margin: 0.5em 0;
+    border-radius: var(--radius);
+    padding: var(--padding) 0 0 var(--padding)
+}
+
+.comment > a {
+    color: var(--text);
+    font-weight: bold;
+    transition: var(--transition);
+    text-decoration: none
+}
+
+.comment > a > img {
+    box-shadow: var(--shadow) var(--box);
+    border-radius: 50%;
+    margin-right: var(--padding);
+    float: left;
+    width: 2.3em;
+    height: 2.3em
+}
+
+.comment > i {
+    float: right;
+    padding: 0.1em 0.6em 0 0;
+    font-size: var(--font);
+    transition-duration: var(--transition);
+    color: var(--blank);
+    cursor: pointer
+}
+
+.comment > a:hover {color: var(--fade)}
+.comment > .markdown {font-size: var(--small)}
+.comment > i[type = "flag"], i[class = "far fa-trash-alt"]:hover, i[class = "far fa-flag"]:hover {color: var(--error)}
+.comment > i[type = "flag"]:hover {color: var(--error-hover)}
+
+.message {
+    position: relative;
+    width: 100%;
+    margin: 1em 0
+}
+
+.message textarea {
+    font-size: var(--small);
+    color: var(--text);
+    border-radius: var(--radius);
+    border: var(--border) var(--plain);
+    font-family: nunito;
+    background: none;
+    width: 100%;
+    height: 10em;
+    padding: var(--padding);
+    resize: none;
+    margin: 0
+}
+
+.message i {
+    position: absolute;
+    right: 0.6em;
+    color: var(--blank);
+    transition-duration: var(--transition);
+    top: 0.5em
+}
+
+.message i[version = "blank"] {cursor: not-allowed}
+.message i[version = "active"] {cursor: pointer}
+.message i[version = "active"]:hover {color: var(--plain)}
+
+.markdown {
+    max-height: 20em;
+    overflow: auto;
+    color: var(--text)
+}
+
+.markdown th, .markdown td {
+    border: var(--border) var(--plain);
+    padding: var(--padding)
+}
+
+.markdown table {
+    border-collapse: collapse;
+    margin: 0.5em 0
+}
+
+.markdown blockquote {
+    background-color: var(--off);
+    border-left: 0.5em solid var(--plain);
+    margin: 0.5em 1em;
+    padding: var(--padding) 1em
+}
+
+.markdown code {
+    display: inline-block;
+    padding: var(--padding);
+    background-color: var(--off);
+    border-radius: var(--radius);
+    border: var(--border) var(--plain)
+}
+
+.markdown p, .markdown ul {margin: 0 0 0.5em 0}
+.markdown pre {margin: 0.5em 0}
+.markdown a {color: var(--deep)}
+.markdown a:hover {color: var(--fade)}
+
+.button {
+    font-weight: bold;
+    display: inline-block;
+    padding: var(--padding);
+    border-radius: var(--radius);
+    border: none
+}
+
+.button i {
+    padding-right: var(--padding)
+}
+
+.button[version = "green"] {
+    background-color: var(--green);
+    color: var(--text-contrast)
+}
+
+.button[version = "green"]:hover {
+    background-color: var(--green-hover)
+}
+
+.button[version = "blue"] {
+    background-color: var(--blue);
+    color: var(--text-contrast)
+}
+
+.button[version = "blue"]:hover {
+    background-color: var(--blue-hover)
+}
+
+.button[version = "plain"] {
+    background-color: var(--button);
+    color: var(--text)
+}
+
+.button[version = "plain"]:hover {
+    background-color: var(--box)
+}
+
+.button[version = "blank"] {
+    background-color: var(--button);
+    color: var(--fade);
+    cursor: not-allowed
+}
+
+.top {
+    background-color: var(--banner);
+    padding: var(--padding);
+    height: 3em
+}
+
+.top div {
+    height: 100%;
+    display: flex
+}
+
+.top a:first-child {
+    height: 100%;
+    flex: 0 1 auto;
+    margin-right: 1em
+}
+
+.top a:first-child span {
+    color: var(--text-title);
+    vertical-align: super;
+    font-family: sans;
+    font-size: var(--small)
+}
+
+.top a:first-child svg {
+    height: 100%
+}
+
+.top form {
+    flex: 1 1 0;
+    display: flex;
+    height: 100%
+}
+
+.top input {
+    width: 0;
+    height: 100%;
+    flex: 1 1 0;
+    background-color: var(--background);
+    color: var(--text);
+    padding: var(--padding);
+    border-radius: var(--radius);
+    border: none
+}
+
+.top select {
+    height: 100%;
+    flex: 0 1 0
+}
+
+.top .button {
+    margin-left: 1em;
+    height: 100%
+}
+
+.profile {
+    position: relative;
+    padding-left: 2.5em
+}
+
+.profile img {
+    box-shadow: var(--shadow) var(--box);
+    border-radius: 50%;
+    position: absolute;
+    transform: translateY(50%);
+    left: 0.2em;
+    bottom: 50%;
+    width: 2em;
+    height: 2em
+}
+
+.account {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    color: var(--text)
+}
+
+.account div {
+    background-color: var(--banner);
+    border-radius: var(--radius);
+    padding: 2em;
+    width: 20em
+}
+
+.account input {
+    background-color: var(--background);
+    border-radius: var(--radius);
+    padding: var(--padding);
+    color: var(--text);
+    display: block;
+    font-weight: bold;
+    border: none;
+    width: 100%;
+    margin-bottom: 1em
+}
+
+.account button {  
+    display: inline;
+    margin-right: 0.5em
+}
+
+.account h3 span {
+    color: var(--green);
+    font-weight: bold
+}
+
+.account div span {
+    color: var(--error);
+    font-size: var(--small);
+    display: inline;
+    font-weight: bold
+}
+
+.account a {
+    padding: var(--padding) 0;
+    color: var(--deep);
+    font-weight: bold;
+    display: inline
+}    
+
+.account a:hover {color: var(--blank)}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 1.5em;
+    align-items: stretch
+}
+
+.gallery img {
+    max-width: 100%;
+    box-shadow: var(--shadow) var(--box);
+    border-radius: var(--radius);
+    transition-duration: var(--transition)
+}
+
+.gallery img:hover {opacity: 0.5}
+
+.tab {
+    color: var(--text);
+    background-color: var(--background);
+    border-radius: var(--radius);
+    border: var(--border) var(--plain);
+    transition: var(--transition);
+    font-size: var(--small);
+    font-family: monospace;
+    padding: 0.2em;
+    display: inline-block;
+    margin-bottom: 0.3em
+}
+
+button.tab:hover, a.tab:hover {background-color: var(--button)}
+.tab i {padding-right: var(--padding)}
+
+@media screen and (min-width: 86em) {
+    .top > div {max-width: 86em; padding: 0 6em; margin: 0 auto}
+    .main[page = "wide"] {max-width: 86em; padding: 1em 6em 2em 6em; margin: 0 auto}
+    :root {--font: 20px; --small: 16px}
+}
+
+@media screen and (min-width: 64em) {
+    .main[page = "narrow"] {max-width: 64em; padding: 1em 6em 2em 6em; margin: 0 auto}
+    :root {--font: 20px; --small: 16px}
+}
+
+@media screen and (min-width: 50em) and (max-width: 86em) {
+    .top > div {padding: 0 4em; margin: 0 auto}
+    .main[page = "wide"] {padding: 1em 4em 2em 4em}
+    :root {--font: 18px; --small: 14px}
+}
+
+@media screen and (min-width: 50em) and (max-width: 64em) {
+    .main[page = "narrow"] {padding: 1em 4em 2em 4em}
+    :root {--font: 18px; --small: 14px}
+}
+
+@media screen and (max-width: 50em) {
+    .top > div > form, .top > div > input, .top > div > a > span {display: none}
+    .top > div {padding: 0 1em; margin: 0 auto}
+    .main {padding: 1em 1em 2em 1em}
+    :root {--font: 16px; --small: 12px}
+}
+
+* {box-sizing: border-box}
