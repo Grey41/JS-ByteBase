@@ -1654,7 +1654,7 @@ app.get("/", async (req, res, next) => {
 })
 
 app.get("/gallery", async (req, res, next) => {
-    try {
+    try {        
         res.send(page("gallery", {
             user: await person(req.session.name)}))
     }
@@ -1814,8 +1814,10 @@ app.post("/create", async (req, res, next) => {
             attachments: [{filename: "profile.png", path: url}]
         }
         
-        transporter.sendMail(options, err => {if (err) throw err})
-        res.redirect("/")
+        transporter.sendMail(options, error => {
+            if (error) return next(error)
+            res.redirect("/")
+        })
     }
     
     catch (error) {next(error)}
@@ -1862,8 +1864,10 @@ app.post("/email", async (req, res, next) => {
             html: emails.verify(user.name, address)
         }
         
-        transporter.sendMail(options, err => {if (err) throw err})
-        res.send(page("verify", {email: req.body.email}))
+        transporter.sendMail(options, error => {
+            if (error) return next(error)
+            res.send(page("verify", {email: req.body.email}))
+        })
     }
 
     catch (error) {next(error)}
