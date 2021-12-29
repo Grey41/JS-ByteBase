@@ -404,8 +404,8 @@ ${blocks.footer()}
 
 <style>
     .image {
-        display: inline-block;
         margin-right: 1em;
+        float: left;
         position: relative
     }
 
@@ -427,16 +427,15 @@ ${blocks.footer()}
         padding: 0.2em 0.4em
     }
 
-    .main > div:first-child {margin-bottom: 1em}
+    .main > div:first-child {
+        margin-bottom: 1em;
+        display: inline-block
+    }
+    
     .image button:hover {background-color: var(--button)}
     .image i {padding-right: var(--padding)}
     .main .profile {margin-bottom: 0.6em}
-
-    .data {
-        display: inline-block;
-        vertical-align: top;
-        overflow: hidden
-    }
+    .data {overflow: hidden}
 
     h1 {
         color: var(--text);
