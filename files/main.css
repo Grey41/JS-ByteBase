@@ -131,8 +131,8 @@ body {
 }
 
 button, select, input {
+    -webkit-appearance: none;
     font-family: nunito;
-    appearance: none;
     font-size: var(--font)
 }
 
@@ -158,6 +158,9 @@ button {cursor: pointer}
 a {text-decoration: none}
 a, button {transition-duration: var(--transition)}
 input[type = "file"] {display: none}
+
+.admin {margin-bottom: 1em}
+.admin a {margin-right: 1em}
 
 .background {
     position: fixed;
@@ -205,7 +208,7 @@ input[type = "file"] {display: none}
 
 .comment > a:hover {color: var(--fade)}
 .comment > .markdown {font-size: var(--small)}
-.comment > i[type = "flag"], i[class = "far fa-trash-alt"]:hover, i[class = "far fa-flag"]:hover {color: var(--error)}
+.comment > i[type = "flag"], i.fa-trash-alt:hover, i.fa-flag:hover {color: var(--error)}
 .comment > i[type = "flag"]:hover {color: var(--error-hover)}
 
 .message {
