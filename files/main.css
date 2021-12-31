@@ -208,7 +208,7 @@ input[type = "file"] {display: none}
 
 .comment > a:hover {color: var(--fade)}
 .comment > .markdown {font-size: var(--small)}
-.comment > i[type = "flag"], i.fa-trash-alt:hover, i.fa-flag:hover {color: var(--error)}
+.comment > i[type = "flag"], .comment > i.fa-trash-alt:hover, .comment > i.fa-flag:hover {color: var(--error)}
 .comment > i[type = "flag"]:hover {color: var(--error-hover)}
 
 .message, .description {
