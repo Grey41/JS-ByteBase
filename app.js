@@ -934,14 +934,13 @@ ${blocks.footer()}
 
             image.onload = _ => {
                 const canvas = document.createElement("canvas")
-                const context = canvas.getContext("2d")
                 const picture = input.nextElementSibling
-                const user = document.querySelector(".profile").firstElementChild
+                const user = get(".profile").firstElementChild
 
                 canvas.width = 100
                 canvas.height = 100
 
-                context.drawImage(image, 0, 0, 100, 100) // stretches image (sort this out soon)
+                render(canvas, image, 1)
                 picture.src = canvas.toDataURL("image/jpeg", 0.8)
                 user.src = picture.src
 
@@ -1403,18 +1402,7 @@ ${blocks.footer()}
             const image = new Image()
 
             image.onload = _ => {
-                const width = image.width * canvas.height / image.height
-                const height = image.height * canvas.width / image.width
-
-                if (image.width / 5 * 3 > image.height)
-                    context.drawImage(
-                        image, (canvas.width - width) / 2,
-                        0, width, canvas.height)
-
-                else context.drawImage(
-                    image, 0, (canvas.height - height) / 2,
-                    canvas.width, height)
-
+                render(canvas, image, 5 / 3)
                 capture()
             }
             
