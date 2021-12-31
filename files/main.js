@@ -19,6 +19,24 @@ mutation.observe(document.documentElement, {childList: true})
 const input = text => text.nextElementSibling.setAttribute("version", text.value.trim() ? "active" : "blank")
 const get = query => document.querySelector(query)
 
+const render = (canvas, image, ratio) => {
+    const context = canvas.getContext("2d")
+    const width = image.width * canvas.height / image.height
+    const height = image.height * canvas.width / image.width
+
+    context.fillStyle = "#fff"
+    context.fillRect(0, 0, canvas.width, canvas.height)
+
+    if (image.width > image.height * ratio)
+        context.drawImage(
+            image, (canvas.width - width) / 2,
+            0, width, canvas.height)
+
+    else context.drawImage(
+        image, 0, (canvas.height - height) / 2,
+        canvas.width, height)
+}
+
 const gallery = event => {
     const gallery = get(".gallery")
     const array = JSON.parse(event.target.response)
