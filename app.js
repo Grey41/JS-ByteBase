@@ -108,7 +108,7 @@ const blocks = {
 const pages = {
     home: data => ({
         head: /*html*/
-`<title>JS-ByteBase · JavaScript Coding Challenge</title>
+`<title>JS-ByteBase · The JavaScript 2K Coding Challenge</title>
 
 <script type = application/ld+json>
     {
@@ -507,7 +507,7 @@ ${blocks.footer()}
             </button>` : /*html*/ `
             </span>`}
 
-            <a href = ${"/project/" + data.project.id} target = _blank>
+            <a href = "/project/${data.project.id}" target = _blank>
                 <img src = "${data.project.image}">
             </a>
         </div>
@@ -515,7 +515,7 @@ ${blocks.footer()}
         <div class = data>
             <h1>${data.project.title}</h1>
 
-            <a href = ${"/profile/" + data.creator.name} class = "profile button" version = plain>
+            <a href = "/profile/${data.creator.name}" class = "profile button" version = plain>
                 <img src = "${data.creator.image}">
                 ${data.creator.name}
             </a><br>
@@ -524,7 +524,7 @@ ${blocks.footer()}
             <span class = tab>${data.project.views + (data.project.views == 1 ? " view" : " views")}</span>
             <span class = tab>${Buffer.from(data.project.code).length} bytes</span><br>
 
-            <a href = ${"/project/" + data.project.id} target = _blank class = tab>
+            <a href = "/project/${data.project.id}" target = _blank class = tab>
                 <i class = "far fa-play-circle"></i>Play
             </a>${data.user ? /*html*/ `${data.creator.name == data.user.name ? /*html*/ `
                 
@@ -556,9 +556,9 @@ ${blocks.footer()}
     </div>
 
     <div class = comments>${data.project.comments.reduce(
-        (all, item) => all + /*html*/ `
-        <div class = comment>
-            <a href = ${"/profile/" + item.name}>
+        (all, item, index) => all + /*html*/ `
+        <div class = comment id = ${index}>
+            <a href = "/profile/${item.name}">
                 <img src = "${data.users[item.name]}">${item.name}
             </a>${data.user ? /*html*/ `
                 
@@ -610,7 +610,7 @@ ${blocks.footer()}
     }
 
     const remove = button => {
-        if (!confirm("Please confirm this decision"))
+        if (!confirm("Are you sure you want to delete this comment?"))
             return
 
         const index = find(button)
@@ -620,11 +620,11 @@ ${blocks.footer()}
 
     const enter = _ => {
         if (Number(smiles.textContent) >= 10) {
-            alert("You cannot delete a project with 10 or more smiles")
+            alert("You cannot delete a project with 10 or more smiles.")
             return false
         }
 
-        return confirm("Please confirm this decision")
+        return confirm("Are you sure you want to delete this project?")
     }
 
     const flag = button => {
@@ -1521,6 +1521,296 @@ ${blocks.footer()}
 <canvas id = canvas class = background></canvas>
 <script>error(canvas, 403, 1, 1, 1)</script>`
     }),
+
+    reported: data => ({
+        head: /*html*/
+`<title>JS-ByteBase · Reported</title>
+
+<style>
+    .box > div {
+        border-radius: var(--radius);
+        border: var(--border);
+        margin: 0.5em 0;
+        position: relative
+    }
+
+    .box > div.project {border-color: var(--error)}
+    .box > div.note {border-color: var(--deep)}
+
+    .box a {
+        border-radius: var(--radius);
+        padding: var(--padding);
+        color: var(--text);
+        display: block
+    }
+
+    .box a:hover {background-color: var(--off)}
+
+    .box > div > div {
+        padding: var(--padding);
+        position: absolute;
+        color: var(--deep);
+        top: 0;
+        right: 0
+    }
+
+    .box i {
+        color: var(--blank);
+        transition-duration: var(--transition);
+        margin-left: var(--padding);
+        cursor: pointer
+    }
+</style>`,
+
+        body: /*html*/
+`${blocks.top(data.user)}
+
+<section class = main page = narrow>
+    <div class = admin>
+        <a href = /reported class = button version = blue>
+            <i class = "far fa-flag"></i>Reported</a>
+
+        <a href = /errors class = button version = plain>
+            <i class = "fas fa-bug"></i>Errors</a>
+
+        <a href = /users class = button version = plain>
+            <i class = "fas fa-users"></i>Users</a>
+    </div>
+
+    <div class = box>${data.projects.reduce(
+        (all, project) => all + (project.flags.length ? /*html*/ `
+        <div class = project project = ${project.id}>
+            <a href = "/demo/${project.id}">${project.title}</a>
+            <div>${project.flags.length}<i class = "far fa-trash-alt" onclick = project(this)></i></div>
+        </div>` : "") + project.comments.reduce(
+            (all, comment, index) => all + (comment.flags.length ? /*html*/ `
+        <div class = note project = ${project.id} index = ${index}>
+            <a href = "/demo/${project.id}#${index}">${comment.comment}</a>
+            <div>${comment.flags.length}<i class = "far fa-trash-alt" onclick = comment(this)></i></div>
+        </div>` : ""), ""), "")}
+    </div>
+</section>
+
+${blocks.footer()}
+
+<script>
+    const http = new XMLHttpRequest()
+
+    const project = button => {
+        if (!confirm("Are you sure you want to delete this project?"))
+            return
+
+        const parent = button.parentElement.parentElement
+        const project = parent.getAttribute("project")
+        
+        http.open("POST", "/delete")
+        http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        http.send("project=" + project)
+        parent.remove()
+
+        const elements = document.querySelectorAll(${`\`.note[project = "\${project}"]\``})
+        while (elements.length > 0) elements[0].remove()
+    }
+
+    const comment = button => {
+        if (!confirm("Are you sure you want to delete this comment?"))
+            return
+
+        const parent = button.parentElement.parentElement
+        const project = parent.getAttribute("project")
+        const index = parent.getAttribute("index")
+
+        http.open("POST", "/comment")
+        http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        http.send(${`\`project=\${project}&index=\${index}\``})
+        parent.remove()
+    }
+</script>`
+    }),
+
+    errors: data => ({
+        head: /*html*/
+`<title>JS-ByteBase · Errors</title>
+
+<style>
+    .box > div {
+        border-radius: var(--radius);
+        border: var(--border) var(--plain);
+        padding: var(--padding);
+        overflow: hidden;
+        margin: 0.5em 0;
+        color: var(--error);
+        transition-duration: var(--reveal);
+        position: relative
+    }
+
+    .box > div[type = "closed"] {max-height: 2.3em}
+    .box > div[type = "open"] {max-height: 20em}
+
+    .box > div > div:nth-child(2) {
+        color: var(--deep);
+        position: absolute;
+        padding: var(--padding);
+        top: 0;
+        right: 0
+    }
+
+    .box > div > div:last-child {margin: var(--padding)}
+
+    .box i {
+        color: var(--blank);
+        transition-duration: var(--transition);
+        cursor: pointer;
+        padding: 0 var(--padding)
+    }
+
+    .box i[type = "down"] {transform: rotate(0deg)}
+    .box i[type = "up"] {transform: rotate(540deg)}
+    .box i:hover {color: var(--text)}
+</style>`,
+
+        body: /*html*/
+`${blocks.top(data.user)}
+
+<section class = main page = narrow>
+    <div class = admin>
+        <a href = /reported class = button version = plain>
+            <i class = "far fa-flag"></i>Reported</a>
+
+        <a href = /errors class = button version = blue>
+            <i class = "fas fa-bug"></i>Errors</a>
+
+        <a href = /users class = button version = plain>
+            <i class = "fas fa-users"></i>Users</a>
+    </div>
+
+    <div class = box>${data.errors.reduce(
+        (all, error) => all + /*html*/ `
+        <div type = closed>
+            <div>
+                <i class = "fas fa-chevron-down" type = down onclick = change(this)></i>
+                ${convert(error.message)}
+            </div>
+
+            <div>${error.index}</div>
+            <div>${convert(error.stack)}</div>
+        </div>`, "")}
+    </div>
+</section>
+
+${blocks.footer()}
+
+<script>
+    const change = icon => {
+        const type = icon.getAttribute("type") == "down"
+
+        icon.parentElement.parentElement.setAttribute("type", type ? "open" : "closed")
+        icon.setAttribute("type", type ? "up" : "down")
+    }
+</script>`
+    }),
+
+    users: data => ({
+        head: /*html*/
+`<title>JS-ByteBase · Users</title>
+
+<style>
+    .box > div {
+        position: relative;
+        border-radius: var(--radius);
+        border: var(--border) var(--plain);
+        margin-bottom: 0.5em
+    }
+
+    .box img {
+        box-shadow: var(--shadow) var(--box);
+        border-radius: 50%;
+        width: 2.5em;
+        height: 2.5em
+    }
+
+    .box a {
+        border-radius: var(--radius);
+        display: block;
+        padding: var(--padding);
+        color: var(--text)
+    }
+
+    .box a:hover {background-color: var(--off)}
+
+    .box a > div {
+        font-size: var(--small);
+        display: inline-block;
+        padding-left: var(--padding);
+        vertical-align: top
+    }
+
+    .box a div div {
+        font-size: var(--font);
+        font-weight: bold
+    }
+
+    .box i {
+        position: absolute;
+        padding: var(--padding);
+        color: var(--blank);
+        transition-duration: var(--transition);
+        cursor: pointer;
+        right: 0;
+        top: 0
+    }
+</style>`,
+
+        body: /*html*/
+`${blocks.top(data.user)}
+
+<section class = main page = narrow>
+    <div class = admin>
+        <a href = /reported class = button version = plain>
+            <i class = "far fa-flag"></i>Reported</a>
+
+        <a href = /errors class = button version = plain>
+            <i class = "fas fa-bug"></i>Errors</a>
+
+        <a href = /users class = button version = blue>
+            <i class = "fas fa-users"></i>Users</a>
+    </div>
+
+    <div class = box>${data.users.reduce(
+        (all, user) => all + /*html*/ `
+        <div>
+            <a href = "/profile/${user.name}">
+                <img src = "${user.image}">
+
+                <div>
+                    <div>${convert(user.name)}</div>
+                    ${user.email}
+                </div>
+            </a>
+
+            <i class = "far fa-trash-alt" onclick = expel(this)></i>
+        </div>`, "")}
+    </div>
+</section>
+
+${blocks.footer()}
+
+<script>
+    const http = new XMLHttpRequest()
+
+    const expel = button => {
+        if (!confirm("This will expel a user, are you sure you want to do this?"))
+            return
+
+        const name = button.previousElementSibling.lastElementChild.firstElementChild.textContent
+        button.parentElement.remove()
+
+        http.open("POST", "/expel")
+        http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+        http.send("name=" + encodeURIComponent(name))
+    }
+</script>`
+    }),
 }
 
 const page = (name, data = {}) => {
@@ -1641,6 +1931,53 @@ app.get("/sitemap.xml", async (req, res, next) => {
     catch (error) {next(error)}
 })
 
+app.get("/reported", async (req, res, next) => {
+    try {
+        if (req.session.name == process.env.HOST) {
+            const projects = await find("projects").find(
+                {}, {projection: {title: 1, comments: 1, flags: 1, id: 1}}).toArray()
+
+            const user = await person(req.session.name)
+            return res.send(page("reported", {user, projects}))
+        }
+
+        next()
+    }
+
+    catch (error) {next(error)}
+})
+
+app.get("/errors", async (req, res, next) => {
+    try {
+        if (req.session.name == process.env.HOST) {
+            const errors = await find("errors").find().toArray()
+            const user = await person(req.session.name)
+
+            return res.send(page("errors", {user, errors}))
+        }
+
+        next()
+    }
+
+    catch (error) {next(error)}
+})
+
+app.get("/users", async (req, res, next) => {
+    try {
+        if (req.session.name == process.env.HOST) {
+            const users = await find("users").find(
+                {}, {projection: {name: 1, email: 1, image: 1}}).toArray()
+
+            const user = await person(req.session.name)
+            return res.send(page("users", {user, users}))
+        }
+
+        next()
+    }
+
+    catch (error) {next(error)}
+})
+
 app.get("/create", (req, res) => res.send(page("create")))
 app.get("/sign", (req, res) => res.send(page("sign")))
 app.get("/email", (req, res) => res.send(page("email")))
@@ -1681,6 +2018,31 @@ app.get("/project", async (req, res, next) => {
     catch (error) {next(error)}
 })
 
+app.post("/expel", async (req, res, next) => {
+    try {
+        if (req.session.name == process.env.HOST) {
+            await find("users").deleteOne({name: req.body.name})
+            await find("projects").deleteMany({name: req.body.name})
+            const projects = await find("projects").find().toArray()
+
+            projects.forEach(async project => {
+                let preserved = true
+
+                project.comments = project.comments.filter(item =>
+                    item.name != req.body.name ? true : preserved = false)
+
+                project.flags = project.flags.filter(item => 
+                    item != req.body.name ? true : preserved = false)
+
+                if (!preserved) await find("projects").updateOne({id: project.id},
+                    {$set: {comments: project.comments, flags: project.flags}})
+            })
+        }
+    }
+    
+    catch (error) {next(error)}
+})
+
 app.post("/finish", async (req, res, next) => {
     try {
         const user = await person(req.session.name)
@@ -1689,6 +2051,8 @@ app.post("/finish", async (req, res, next) => {
             req.session.code = req.body.code
             return res.send(page("finish", {user, code: req.body.code}))
         }
+
+        next()
     }
 
     catch (error) {next(error)}
@@ -1728,6 +2092,8 @@ app.post("/submit", async (req, res, next) => {
     
             return res.redirect("/demo/" + identity)
         }
+
+        next()
     }
 
     catch (error) {next(error)}
