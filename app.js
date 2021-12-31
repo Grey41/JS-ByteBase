@@ -576,6 +576,7 @@ ${blocks.footer()}
     <div class = message>
         <textarea placeholder = "Add comment" oninput = input(this) autocomplete = off></textarea>
         <i onclick = comment(this) class = "fas fa-paper-plane" version = blank></i>
+        <a href = https://www.markdownguide.org/basic-syntax target = _blank>Markdown supported</a>
     </div>` : ""}
 </section>
 
@@ -1230,7 +1231,6 @@ ${blocks.footer()}
         border: var(--border) var(--plain);
         font-size: var(--font);
         font-family: nunito;
-        margin-bottom: 1em;
         width: 100%
     }
 
@@ -1338,7 +1338,11 @@ ${blocks.footer()}
 
         <input type = hidden name = image autocomplete = off>
         <input type = text placeholder = Title name = title>
-        <textarea placeholder = Description name = description></textarea>
+
+        <div class = description>
+            <textarea placeholder = Description name = description></textarea>
+            <a href = https://www.markdownguide.org/basic-syntax target = _blank>Markdown supported</a>
+        </div>
 
         <div class = tags onkeydown = key(event) oninput = insert(event)>
             <input placeholder = "Tag 1" name = tag_1>
