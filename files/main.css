@@ -211,9 +211,8 @@ input[type = "file"] {display: none}
 .comment > i[type = "flag"], i.fa-trash-alt:hover, i.fa-flag:hover {color: var(--error)}
 .comment > i[type = "flag"]:hover {color: var(--error-hover)}
 
-.message {
+.message, .description {
     position: relative;
-    width: 100%;
     margin: 1em 0
 }
 
@@ -231,7 +230,7 @@ input[type = "file"] {display: none}
     margin: 0
 }
 
-.message i {
+.message > i {
     position: absolute;
     right: 0.6em;
     color: var(--blank);
@@ -239,6 +238,16 @@ input[type = "file"] {display: none}
     top: 0.5em
 }
 
+.message a, .description a {
+    position: absolute;
+    right: 0.4em;
+    bottom: 0.3em;
+    color: var(--blank);
+    transition-duration: var(--transition);
+    font-size: var(--small)
+}
+
+.message a:hover, .description a:hover {color: var(--deep)}
 .message i[version = "blank"] {cursor: not-allowed}
 .message i[version = "active"] {cursor: pointer}
 .message i[version = "active"]:hover {color: var(--plain)}
