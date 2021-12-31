@@ -1537,6 +1537,7 @@ ${blocks.footer()}
     }
 
     .box a:hover {background-color: var(--off)}
+    .box i:hover {color: var(--error)}
 
     .box > div > div {
         padding: var(--padding);
@@ -1729,6 +1730,7 @@ ${blocks.footer()}
     }
 
     .box a:hover {background-color: var(--off)}
+    .box i:hover {color: var(--error)}
 
     .box a > div {
         font-size: var(--small);
