@@ -2467,7 +2467,7 @@ app.use(async (err, req, res, next) => {
 })
 
 client.connect()
-server.listen(process.env.PORT)
+server.listen(process.env.PORT || 5000)
 
 setInterval(async _ => await find("verify").deleteMany(
     {date: {$lt: Date.now() - 1000 * 60 * 60}}), 1000 * 60)
