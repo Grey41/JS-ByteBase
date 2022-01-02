@@ -14,9 +14,6 @@ const store = require("connect-mongo")
 const bcrypt = require("bcrypt")
 const app = express()
 const server = require("http").Server(app)
-const set = JSON.parse(process.env.APP_CONFIG).mongo
-const url = `mongodb://${set.user}:${encodeURIComponent(process.env.DATABASE)}@${set.hostString}`
-const client = new mongodb(url)
 const markdown = new remarkable({breaks: true})
 
 const emails = {
@@ -1834,23 +1831,13 @@ const find = collection => client.db(set.db).collection(collection)
 const person = async (name) => await find("users").findOne({name}, {projection: {name: 1, image: 1}})
 const protocol = req => req.headers["x-forwarded-proto"] == "https" ? "https" : "http"
 const word = name => new RegExp(`\\b${name}\\b`, "i")
-const age = 3.1536e12
 
-const session = storage({
-    cookie: {maxAge: age},
-    secret: process.env.SECRET,
-    saveUninitialized: true,
-    resave: true,
-    secure: true,
-    store: store.create({mongoUrl: url})
-})
+const env = name => {
+    if (!process.env[name])
+        throw new Error("Environment variable is missing: " + name)
 
-const transporter = nodemailer({
-    host: "smtp.zoho.eu",
-    auth: {user: process.env.EMAIL, pass: process.env.PASSWORD},
-    port: 465,
-    secure: true
-})
+    return process.env[name]
+}
 
 const convert = string => {
     let value = ""
@@ -1890,6 +1877,28 @@ const collection = async (filter = "Top", search = "", index = 0, key, person) =
             key => ({image: rated[key], id: key.slice(-4)}))
 }
 
+const age = 3.1536e12
+const set = JSON.parse(env("APP_CONFIG")).mongo
+const url = `mongodb://${set.user}:${encodeURIComponent(env("DATABASE"))}@${set.hostString}`
+const client = new mongodb(url)
+const host = env("HOST")
+
+const session = storage({
+    cookie: {maxAge: age},
+    secret: env("SECRET"),
+    saveUninitialized: true,
+    resave: true,
+    secure: true,
+    store: store.create({mongoUrl: url})
+})
+
+const transporter = nodemailer({
+    host: "smtp.zoho.eu",
+    auth: {user: env("EMAIL"), pass: env("PASSWORD")},
+    port: 465,
+    secure: true
+})
+
 app.use(session)
 app.use(parser())
 app.use(express.urlencoded({extended: true}))
@@ -1927,7 +1936,7 @@ app.get("/sitemap.xml", async (req, res, next) => {
 
 app.get("/reported", async (req, res, next) => {
     try {
-        if (req.session.name == process.env.HOST) {
+        if (req.session.name == host) {
             const projects = await find("projects").find(
                 {}, {projection: {title: 1, comments: 1, flags: 1, id: 1}}).toArray()
 
@@ -1943,7 +1952,7 @@ app.get("/reported", async (req, res, next) => {
 
 app.get("/errors", async (req, res, next) => {
     try {
-        if (req.session.name == process.env.HOST) {
+        if (req.session.name == host) {
             const errors = await find("errors").find().toArray()
             const user = await person(req.session.name)
 
@@ -1958,7 +1967,7 @@ app.get("/errors", async (req, res, next) => {
 
 app.get("/users", async (req, res, next) => {
     try {
-        if (req.session.name == process.env.HOST) {
+        if (req.session.name == host) {
             const users = await find("users").find(
                 {}, {projection: {name: 1, email: 1, image: 1}}).toArray()
 
@@ -2014,7 +2023,7 @@ app.get("/project", async (req, res, next) => {
 
 app.post("/expel", async (req, res, next) => {
     try {
-        if (req.session.name == process.env.HOST) {
+        if (req.session.name == host) {
             await find("users").deleteOne({name: req.body.name})
             await find("projects").deleteMany({name: req.body.name})
             const projects = await find("projects").find().toArray()
@@ -2285,7 +2294,7 @@ app.post("/delete", async (req, res, next) => {
             return res.redirect("/gallery")
         }
 
-        if (req.session.name == process.env.HOST)
+        if (req.session.name == host)
             await find("projects").deleteOne({id: req.body.project})
     }
 
