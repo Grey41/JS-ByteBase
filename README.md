@@ -5,11 +5,29 @@ Welcome to JS-ByteBase.
 Visit [js-bytebase.com](https://js-bytebase.com) to see the official website.
 Please contact us at [hello@js-bytebase.com](mailto:hello@js-bytebase.com) if you have any questions.
 
-The following Visual Studio Code extensions will improve the syntax highlighting of the source code.
-* [es6-string-html](https://github.com/0x00000001A/es6-string-html)
-* [es6-string-javascript](https://github.com/Zjcompt/es6-string-javascript)
+To run JS-ByteBase on your local computer, install the required packages.
+```
+npm install
+```
 
-To run JS-ByteBase on your local computer, use the following command.
+To generate the variables for the `.env` file, follow the instructions below.
+```
+APP_CONFIG = {"mongo": {
+    "hostString": "The full MongoDB host string",
+    "user": "The database username",
+    "db": "The database name, usually the same as the username"
+}}
+
+SECRET = A random secret password
+PASSWORD = Password for the email address
+EMAIL = The email address itself
+DATABASE = Password for the MongoDB database
+HOST = Username of the host
+```
+
+Finally start the server with the following command.
 ```
 node app.js
 ```
+
+The server will listen as default on `localhost:5000`.
