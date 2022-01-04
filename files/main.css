@@ -156,7 +156,7 @@ footer a {color: var(--deep)}
 footer a:hover {color: var(--blank)}
 button {cursor: pointer}
 a {text-decoration: none}
-a, button {transition-duration: var(--transition)}
+a, button, label {transition-duration: var(--transition)}
 input[type = "file"] {display: none}
 
 .admin {margin-bottom: 1em}
