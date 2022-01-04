@@ -228,12 +228,26 @@ const pages = {
         head: /*html*/
 `<title>JS-ByteBase · Gallery</title>
 
-<meta name = description content = "Explore the complete collection of JS-ByteBase projects">`,
+<meta name = description content = "Explore the complete collection of JS-ByteBase projects">
+
+<style>
+    h1 {
+        position: fixed;
+        right: 50%;
+        bottom: 50%;
+        transform: translate(50%, 50%);
+        opacity: 0.5;
+        color: var(--text)
+    }
+
+    h1[type = "hidden"] {display: none}
+</style>`,
 
         body: /*html*/
 `${blocks.top(data.user, 1, data.search)}
 
 <section class = main page = wide>
+    <h1 type = hidden>No results found</h1>
     <div class = gallery></div>
 </section>
 
@@ -243,13 +257,22 @@ ${blocks.footer()}
     const http = new XMLHttpRequest()
     const key = Math.random().toString().substring(2)
 
-    const submit = _ => get(".gallery").innerHTML = ""
+    const submit = _ => {
+        get(".gallery").innerHTML = ""
+        request()
+    }
 
     const request = _ => {
         if (innerHeight + Math.ceil(pageYOffset) < document.body.offsetHeight)
             return
 
-        http.onload = gallery
+        http.onload = event => {
+            gallery(event)
+
+            const results = get(".gallery").children.length
+            get("h1").setAttribute("type", results ? "hidden" : "active")
+        }
+
         http.open("POST", "/search")
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
 
@@ -969,7 +992,11 @@ ${blocks.footer()}
 
         const frames = get(".gallery")
 
-        http.onload = gallery
+        http.onload = event => {
+            gallery(event)
+            http.onload = _ => {}
+        }
+
         http.open("POST", "/search")
         http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
         http.send(${`\`filter=Newest&index=\${frames.children.length}&person=${data.profile.name}\``})
