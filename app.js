@@ -1851,25 +1851,28 @@ const collection = async (filter = "Top", search = "", index = 0, key, person) =
     const rated = {}
 
     projects.forEach(project => {
-        let rating = filter == "Top" ?
+        const rating = filter == "Top" ?
             project.smiles.length + (project.views / 20) :
             filter == "Newest" ? 5 / ((Date.now() - project.date) / (1000 * 60 * 60 * 24)) :
             (key + project.date) % 100 / 10
-            
+
+        let restrict = 0
+        
         array.forEach(item => {
-            project.tags.forEach(tag => tag == item && (rating += 10))
+            project.tags.forEach(tag => tag == item && (restrict += 10))
 
             const get = (string, value) => {
                 const match = string.match(new RegExp(item, "i"))
                 return (match ? match.length * value : 0)
             }
 
-            rating += get(project.title, 5)
-            rating += get(project.description, 2)
-            project.comments.forEach(source => rating += get(source.comment, 1))
+            restrict += get(project.title, 5)
+            restrict += get(project.description, 2)
+            project.comments.forEach(source => restrict += get(source.comment, 1))
         })
 
-        rated[rating + project.id] = project.image
+        if (!array.length || restrict)
+            rated[restrict + rating + project.id] = project.image
     })
 
     return Object.keys(rated).sort(
