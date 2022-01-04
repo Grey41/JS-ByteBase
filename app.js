@@ -823,6 +823,8 @@ ${blocks.footer()}
         color: var(--text)
     }
 
+    .settings select {cursor: pointer}
+
     .settings input {
         padding: var(--padding);
         display: block;
@@ -836,8 +838,6 @@ ${blocks.footer()}
         border-radius: var(--radius);
         margin: var(--padding) 0 1em 0
     }
-
-    /*.tab[version = "hidden"]*/
 </style>`,
 
         body: /*html*/
