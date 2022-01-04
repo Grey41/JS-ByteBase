@@ -50,8 +50,6 @@ const gallery = event => {
         link.appendChild(image)
         gallery.appendChild(link)
     })
-
-    event.target.onload = _ => {} // this could be neater
 }
 
 const construct = (content, name, source, type) => {
@@ -225,5 +223,6 @@ const error = (canvas, status, red, green, blue) => {
 
     addEventListener("resize", resize)
     font.load().then(_ => document.fonts.add(font) || resize())
+    resize()
     loop()
 }
