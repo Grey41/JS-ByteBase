@@ -118,6 +118,7 @@ const error = (canvas, status, red, green, blue) => {
     const image = document.createElement("canvas")
     const context = image.getContext("2d")
     const font = new FontFace("bold", "url(/sans.ttf)")
+    const ratio = devicePixelRatio || 1
 
     const program = shader(webgl, /*glsl*/ `
         attribute vec2 vertex;
@@ -178,14 +179,15 @@ const error = (canvas, status, red, green, blue) => {
     let phase = 1.5
 
     const resize = _ => {
-        canvas.width = image.width = document.body.clientWidth
-        canvas.height = image.height = document.body.clientHeight
+        canvas.width = image.width = document.body.clientWidth * ratio
+        canvas.height = image.height = document.body.clientHeight * ratio
 
+        context.scale(ratio, ratio)
         context.textAlign = "center"
         context.textBaseline = "middle"
-        context.font = canvas.width / 3 + "px bold"
+        context.font = canvas.width / ratio / 3 + "px bold"
         context.fillStyle = "#fff"
-        context.fillText(status, canvas.width / 2, canvas.height / 2)
+        context.fillText(status, canvas.width / ratio / 2, canvas.height / ratio / 2)
 
         webgl.viewport(0, 0, canvas.width, canvas.height)
         webgl.uniform2f(webgl.getUniformLocation(program, "size"), canvas.width, canvas.height)
