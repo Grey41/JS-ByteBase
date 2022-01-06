@@ -153,6 +153,7 @@ const pages = {
     const canvas = get("canvas")
     const webgl = canvas.getContext("webgl")
     const buffer = webgl.createBuffer()
+    const ratio = devicePixelRatio || 1
 
     const program = shader(webgl, ${"`" + /*glsl*/ `
         attribute vec2 vertex;
@@ -192,8 +193,8 @@ const pages = {
     let fade = 0
             
     const resize = _ => {
-        canvas.width = document.body.clientWidth
-        canvas.height = document.body.clientHeight
+        canvas.width = document.body.clientWidth * ratio
+        canvas.height = document.body.clientHeight * ratio
         webgl.viewport(0, 0, canvas.width, canvas.height)
         webgl.uniform1f(webgl.getUniformLocation(program, "width"), canvas.width)
     }
@@ -1475,8 +1476,7 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
-    canvas {width: 100%; height: 100%}
-    
+
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
 </style>`,
@@ -1500,7 +1500,6 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
-    canvas {width: 100%; height: 100%}
 
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
@@ -1525,7 +1524,6 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
-    canvas {width: 100%; height: 100%}
 
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
