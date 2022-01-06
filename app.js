@@ -1199,7 +1199,7 @@ ${blocks.footer()}
 
     const change = _ => {
         localStorage.setItem("code", editor.getValue())
-        const size = new Blob([editor.getValue()]).size
+        const size = new Blob([editor.getValue()], {type: "text/plain"}).size
         const span = get(".bytes")
 
         span.textContent = size + " bytes"
@@ -1475,6 +1475,8 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
+    canvas {width: 100%; height: 100%}
+    
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
 </style>`,
@@ -1498,6 +1500,8 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
+    canvas {width: 100%; height: 100%}
+
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
 </style>`,
@@ -1521,6 +1525,8 @@ ${blocks.footer()}
 
 <style>
     body, html {height: 100%}
+    canvas {width: 100%; height: 100%}
+
     .main {color: var(--text-contrast)}
     .main p {font-size: var(--font)}
 </style>`,
@@ -2085,7 +2091,7 @@ app.post("/finish", async (req, res, next) => {
             return res.send(page("finish", {user, code: req.body.code}))
         }
 
-        next()
+        res.status(403).send(page("forbidden"))
     }
 
     catch (error) {next(error)}
@@ -2126,7 +2132,7 @@ app.post("/submit", async (req, res, next) => {
             return res.redirect("/demo/" + identity)
         }
 
-        next()
+        res.status(403).send(page("forbidden"))
     }
 
     catch (error) {next(error)}
