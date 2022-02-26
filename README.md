@@ -1,5 +1,5 @@
 # JS-ByteBase
-**JavaScript Coding Challenge**
+**JavaScript 2K Coding Challenge**
 
 Welcome to JS-ByteBase.
 Visit [js-bytebase.com](https://js-bytebase.com) to see the official website.
